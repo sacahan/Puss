@@ -13,20 +13,26 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var pathTextField: NSTextField!
     @IBOutlet weak var loading: NSProgressIndicator!
+    @IBOutlet weak var reload: NSButton!
     var helper = GitHelper()
     static var deleteSelectAll: Bool = false
     static var pushSelectAll: Bool = false
+    var message: String = ""
     
     // MARK: NSViewController
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.helper.viewController = self
         self.loading.isHidden = true
+        NotificationCenter.default().addObserver(self, selector: #selector(ViewController.processIncrement(_:)), name: Notification.Name("REMOTE_PUSH_DONE"), object: nil)
+        NotificationCenter.default().addObserver(self, selector: #selector(ViewController.reloadTable(_:)), name: Notification.Name("RELOAD_TABLE_VIEW"), object: nil)
     }
-
-    override var representedObject: AnyObject? {
-        didSet {
-            // Update the view, if already loaded.
+    
+    // 準備轉場
+    override func prepare(for segue: NSStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "messageSegue" {
+            // 將準備呈現的資料設定給下一個segue
+           (segue.destinationController as! MessageViewController).representedObject = self.message
+            self.message = ""
         }
     }
     
@@ -58,10 +64,6 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
         }
     }
     
-    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        return self.helper[row]?.head != "*"
-    }
-    
     func tableView(_ tableView: NSTableView, shouldEdit tableColumn: NSTableColumn?, row: Int) -> Bool {
         return false
     }
@@ -88,6 +90,7 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
         }
     }
     
+    // MARK: @IBAction
     @IBAction func deleteCheck(_ sender: AnyObject) {
         guard let branch = self.helper[sender.selectedRow] else {
             return
@@ -106,10 +109,12 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
         guard let branch = self.helper[sender.selectedRow] else {
             return
         }
+        guard branch.head != "*" else {
+            return
+        }
         self.helper.doBranchCheckout(branch: branch)
     }
     
-    // MARK: Directory
     @IBAction func doRepoPick(_ sender: NSButton) {
         let repoPicker: NSOpenPanel = NSOpenPanel()
         repoPicker.allowsMultipleSelection = false
@@ -138,6 +143,42 @@ class ViewController: NSViewController, NSTableViewDataSource, NSTableViewDelega
             self.loading.startAnimation(self)
         }
         self.helper.doRemotePush()
+    }
+    
+    @IBAction func doReload(_ sender: NSButton) {
+        if self.pathTextField!.stringValue.characters.count > 0 {
+            self.helper.doBranchList()
+        }
+    }
+    
+    // MARK: Observer Action
+    // Notification: REMOTE_PUSH_DONE
+    func processIncrement(_ notify: Notification) {
+        let userInfo = notify.userInfo as! [String : AnyObject?]
+        let index = userInfo["index"] as! Int
+        let total = userInfo["total"] as! Int
+        let result = userInfo["result"] as! String
+        
+        self.loading.increment(by: 1.0)
+        self.message.append(result)
+        
+        if index + 1 == total {
+            self.loading.stopAnimation(self)
+            self.loading.isHidden = true
+            self.helper.doBranchList()
+            
+            //執行轉場
+            self.performSegue(withIdentifier: "messageSegue", sender: nil)
+        }
+    }
+    
+    // Notification: RELOAD_TABLE_VIEW
+    func reloadTable(_ notify: Notification) {
+        self.tableView.reloadData()
+    }
+    
+    deinit {
+        NotificationCenter.default().removeObserver(self)
     }
 }
 

@@ -15,7 +15,7 @@ class Branch: CustomDebugStringConvertible {
     var isDelete: Bool = false
     var isPush: Bool = false
     
-    init(_ record:String) {
+    init(_ record: String) {
         let segments = record.characters.split(separator: " ").map{ String($0) }
         if segments[0] == "*" {
             self.head = segments[0]

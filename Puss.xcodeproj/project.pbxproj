@@ -13,6 +13,7 @@
 		2906B4BA1D2DE76D0097D73B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2906B4B81D2DE76D0097D73B /* Main.storyboard */; };
 		2906B4C21D2DE8BB0097D73B /* GitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2906B4C11D2DE8BB0097D73B /* GitHelper.swift */; };
 		2906B4C41D2E413A0097D73B /* Branch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2906B4C31D2E413A0097D73B /* Branch.swift */; };
+		29F888951D2FFD7300B84CC8 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F888941D2FFD7300B84CC8 /* MessageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		2906B4BB1D2DE76D0097D73B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2906B4C11D2DE8BB0097D73B /* GitHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHelper.swift; sourceTree = "<group>"; };
 		2906B4C31D2E413A0097D73B /* Branch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Branch.swift; sourceTree = "<group>"; };
+		29F888941D2FFD7300B84CC8 /* MessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				2906B4B81D2DE76D0097D73B /* Main.storyboard */,
 				2906B4BB1D2DE76D0097D73B /* Info.plist */,
 				2906B4C31D2E413A0097D73B /* Branch.swift */,
+				29F888941D2FFD7300B84CC8 /* MessageViewController.swift */,
 			);
 			path = Puss;
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 				2906B4C41D2E413A0097D73B /* Branch.swift in Sources */,
 				2906B4B51D2DE76D0097D73B /* ViewController.swift in Sources */,
 				2906B4B31D2DE76D0097D73B /* AppDelegate.swift in Sources */,
+				29F888951D2FFD7300B84CC8 /* MessageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +300,7 @@
 				2906B4C01D2DE76D0097D73B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

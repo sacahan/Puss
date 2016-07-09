@@ -10,14 +10,16 @@ import Cocoa
 import Foundation
 
 class GitHelper {
-    weak var viewController: ViewController?
     var branches: [Branch]?
     var git: String?
     
     var repoPath: String? {
-        didSet { self.doBranchList() }
+        didSet {
+            self.doBranchList()
+        }
     }
     
+    // 取得Git命令與Branch Repo位置
     func doBranchList() {
         branches?.removeAll()
         
@@ -34,48 +36,49 @@ class GitHelper {
             self.branches = allBranches!.characters.split(separator: "\n").map{ Branch(String($0)) }
         }
         
-        self.viewController?.tableView?.reloadData()
+        DispatchQueue.main.async {
+            NotificationCenter.default().post(name: Notification.Name("RELOAD_TABLE_VIEW"), object: self, userInfo: nil)
+        }
     }
     
+    // 執行Remote Delete & Push
     func doRemotePush() {
         DispatchQueue.global(attributes: .qosBackground).async {
-            for branch in self.branches! {
+            for (idx, branch) in self.branches!.enumerated() {
+                var result: String = ""
                 if branch.isDelete {
                     let (delete, _) = self.runCommand(dir: self.repoPath!, command: self.git!, args: "push", "origin", ":" + branch.local)
+                    result.append("⦿ \(branch.local) deleted. ")
                     print("\(delete!)")
                 }
                 
                 if branch.isPush {
                     let (push, _) = self.runCommand(dir: self.repoPath!, command: self.git!, args: "push", "origin", branch.local + ":" + branch.local)
+                    result.append("⦿ \(branch.local) pushed.")
                     print("\(push!)")
                 }
                 
+                if result != "" { result.append("\n") }
+                
                 DispatchQueue.main.async {
-                    self.viewController?.loading.increment(by: 1)
+                    NotificationCenter.default().post(name: Notification.Name("REMOTE_PUSH_DONE"), object: self, userInfo: ["index":idx, "total":self.branches!.count, "result":result])
                 }
-            }
-            
-            DispatchQueue.main.async {
-                self.viewController?.loading.stopAnimation(self)
-                self.viewController?.loading.isHidden = true
-                self.doBranchList()
             }
         }
     }
     
+    // 切換Branch
     func doBranchCheckout(branch: Branch) {
         DispatchQueue.global(attributes: .qosBackground).async {
             let (checkout, s0) = self.runCommand(dir: self.repoPath!, command: self.git!, args: "checkout", branch.local)
             if s0 > 0 {
                 print("Error: \(checkout!) (code: \(s0))")
             }
-            
-            DispatchQueue.main.async {
-                self.doBranchList()
-            }
+            self.doBranchList()
         }
     }
     
+    // 傳入Git參數交由命令列執行
     func runCommand(dir:String, command:String, args:String...) -> (output:String?, exitCode:Int32){
         let task = Task()
         task.currentDirectoryPath = dir
@@ -108,6 +111,5 @@ class GitHelper {
             else { return nil }
         }
     }
-    
 }
 
