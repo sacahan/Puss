@@ -909,9 +909,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="380" height="200"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lms-u0-fcp">
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lms-u0-fcp">
                                 <rect key="frame" x="150" y="4" width="81" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="69" id="X7l-Ox-QOx"/>
+                                </constraints>
                                 <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FHH-EQ-jfv">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -920,9 +922,11 @@
                                     </connections>
                                 </buttonCell>
                             </button>
-                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8ax-Tv-jTh">
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="8ax-Tv-jTh">
                                 <rect key="frame" x="18" y="40" width="344" height="140"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="140" id="WvI-Oc-CCw"/>
+                                </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Multiline Label" id="elE-t9-FD7">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -930,6 +934,13 @@
                                 </textFieldCell>
                             </textField>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="Lms-u0-fcp" firstAttribute="top" secondItem="8ax-Tv-jTh" secondAttribute="bottom" constant="8" symbolic="YES" id="2m2-e8-721"/>
+                            <constraint firstAttribute="trailing" secondItem="8ax-Tv-jTh" secondAttribute="trailing" constant="20" symbolic="YES" id="356-wg-Sqs"/>
+                            <constraint firstItem="Lms-u0-fcp" firstAttribute="centerX" secondItem="8ax-Tv-jTh" secondAttribute="centerX" id="5BH-P2-ytj"/>
+                            <constraint firstItem="8ax-Tv-jTh" firstAttribute="leading" secondItem="a9A-vb-iII" secondAttribute="leading" constant="20" symbolic="YES" id="C1S-xn-tlv"/>
+                            <constraint firstItem="8ax-Tv-jTh" firstAttribute="top" secondItem="a9A-vb-iII" secondAttribute="top" constant="20" symbolic="YES" id="hgI-Lw-EjK"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="messageLabel" destination="8ax-Tv-jTh" id="5MV-VK-4A3"/>
@@ -937,7 +948,7 @@
                 </viewController>
                 <customObject id="mnC-ad-I5K" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="811" y="786"/>
+            <point key="canvasLocation" x="813" y="810"/>
         </scene>
     </scenes>
 </document>
